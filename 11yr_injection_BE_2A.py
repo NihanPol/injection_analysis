@@ -27,8 +27,9 @@ from enterprise_extensions import models, model_utils
 parser = argparse.ArgumentParser(description = "Initiate detection run with model 2A")
 
 #Required arguments:
-parser.add_argument("timpath", help = "Path to base directory holding timfiles of all realizations and amplitude injections")
-parser.add_argument("parpath", help = "Path to directory containing all parfiles")
+parser.add_argument("timpath", help = "Path to base directory holding timfiles of all realizations and amplitude injections; Default: /gpfs/scratch/nspol/real_injected_timfiles/", default = "/gpfs/scratch/nspol/real_injected_timfiles/")
+parser.add_argument("parpath", help = "Path to directory containing all parfiles; Default: /gpfs/home/nspol/stochastic_11yr_analysis/data/partim/", default = "/gpfs/home/nspol/stochastic_11yr_analysis/data/partim/")
+parser.add_argument("noisepath", help = "Path to directory holding noisefiles; Default: /gpfs/home/nspol/stochastic_11yr_analysis/data/noisefiles/", default = "/gpfs/home/nspol/stochastic_11yr_analysis/data/noisefiles/")
 parser.add_argument("realiz", help = "Seed corresponding to the realization")
 parser.add_argument("amp_index", help = "Index of the amplitude injected into the data set you're working with")
 parser.add_argument("outdir", help = "Base directory to store output chain and parameter files")
