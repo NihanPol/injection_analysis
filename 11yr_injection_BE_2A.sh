@@ -4,9 +4,10 @@
 ##PBS -m abe
 #PBS -M noemail@hpc.wvu.edu
 ##PBS -q stmcwilliams_lp
-#PBS -q comm_mmem_week
+##PBS -q comm_mmem_week
+#PBS -q debug
 
-#PBS -t 0-29
+#PBS -t 0-3
 
 #PBS -N real_injection_2A_${PBS_ARRAYID}
 
@@ -19,9 +20,9 @@ export OPENBLAS_NUM_THREADS=1
 export GOTO_NUM_THREADS=1
 export OMP_NUM_THREADS=1 
 
-cd /users/nspol/stochastic_11yr_analysis/notebooks/injection_analysis/
+cd /users/nspol/stochastic_11yr_analysis/notebooks/new_injection_analysis/
 
 ##The first input to the python script is realization number [0,9] while the second is the index
 ##of the amplitude array [0, 29].
 
-python 11yr_injection_BE_2A.py 5 ${PBS_ARRAYID}
+python 11yr_injection_BE_2A.py -realiz 0 -amp_index ${PBS_ARRAYID} -outdir ./test/

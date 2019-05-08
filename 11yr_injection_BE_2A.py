@@ -27,14 +27,14 @@ from enterprise_extensions import models, model_utils
 parser = argparse.ArgumentParser(description = "Initiate detection run with model 2A")
 
 #Required arguments:
-parser.add_argument("timpath", help = "Path to base directory holding timfiles of all realizations and amplitude injections; Default: /gpfs/scratch/nspol/real_injected_timfiles/", default = "/gpfs/scratch/nspol/real_injected_timfiles/")
-parser.add_argument("parpath", help = "Path to directory containing all parfiles; Default: /gpfs/home/nspol/stochastic_11yr_analysis/data/partim/", default = "/gpfs/home/nspol/stochastic_11yr_analysis/data/partim/")
-parser.add_argument("noisepath", help = "Path to directory holding noisefiles; Default: /gpfs/home/nspol/stochastic_11yr_analysis/data/noisefiles/", default = "/gpfs/home/nspol/stochastic_11yr_analysis/data/noisefiles/")
-parser.add_argument("realiz", help = "Seed corresponding to the realization")
-parser.add_argument("amp_index", help = "Index of the amplitude injected into the data set you're working with")
-parser.add_argument("outdir", help = "Base directory to store output chain and parameter files")
+parser.add_argument("-realiz", required = True, help = "Seed corresponding to the realization")
+parser.add_argument("-amp_index", required = True, type = int, help = "Index of the amplitude injected into the data set you're working with")
+parser.add_argument("-outdir", required = True, help = "Base directory to store output chain and parameter files")
 
 #Optional arguments:
+parser.add_argument("--timpath", help = "Path to base directory holding timfiles of all realizations and amplitude injections; Default: /gpfs/scratch/nspol/real_injected_timfiles/", default = "/gpfs/scratch/nspol/real_injected_timfiles/")
+parser.add_argument("--parpath", help = "Path to directory containing all parfiles; Default: /gpfs/home/nspol/stochastic_11yr_analysis/data/partim/", default = "/gpfs/home/nspol/stochastic_11yr_analysis/data/partim/")
+parser.add_argument("--noisepath", help = "Path to directory holding noisefiles; Default: /gpfs/home/nspol/stochastic_11yr_analysis/data/noisefiles/", default = "/gpfs/home/nspol/stochastic_11yr_analysis/data/noisefiles/")
 parser.add_argument("--ephemeris", dest = 'ephem', help = "Choose solar system ephemeris for detection analysis; Default: DE436", choices = ['DE430', 'DE435', 'DE436', 'BayesEphem'], default = 'DE436')
 parser.add_argument("-ul", "--upper-limit", dest = 'ul', action = 'store_true',  help = "Perform an upper limit run instead of detection run; Default: False", default = False)
 parser.add_argument("--gamma", dest = 'gamma',  help = "Specify index of stochastic GWB powerlaw function; Default: 13./3.", type = float, default = 13./3.)
@@ -51,6 +51,8 @@ args = parser.parse_args()
 
 #A_gwb = np.append(A_gwb_1, A_gwb_2)
 A_gwb = np.load(args.amps_path)
+print A_gwb
+print type(args.amp_index)
 
 #injection_dir =	'injections/' +	'injecting_' + str(A_gwb[loc]) + '_gwb/'
 
@@ -78,7 +80,7 @@ psrlist = np.loadtxt("psrlist.txt", dtype = 'string')
 psrs = []
 for p, t in zip(parfiles, timfiles):
     if args.ephem in ['DE430', 'DE435', 'DE436']:
-        psr = Pulsar(p, t, ephem=ephem) #Cannot read in pulsars with BayesEphem
+        psr = Pulsar(p, t, ephem=args.ephem) #Cannot read in pulsars with BayesEphem
     else:
         psr = Pulsar(p, t, ephem = 'DE436')
     #Check if this pulsar has baseline > 3 years
