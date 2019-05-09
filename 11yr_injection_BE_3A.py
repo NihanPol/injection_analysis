@@ -41,6 +41,7 @@ parser.add_argument("--upper-limit", dest = 'ul', action = 'store_true',  help =
 parser.add_argument("--gamma", dest = 'gamma',  help = "Specify index of stochastic GWB powerlaw function; Default: 13./3.", type = float, default = 13./3.)
 parser.add_argument("--nsamples", dest = 'nsamples', help = 'Number of samples in output chain; Default: 5e6', type = int, default = 500000)
 parser.add_argument("--amps_path", dest = 'amps_path', help = "Path to numpy file containing array of injected stochastic GWB amplitudes; Default: ./injected_amps.npy", default = './injected_amps.npy')
+parser.add_argument("--psrlist", dest = 'psrlist', default = '', help = "Provide a text file of pulsar names to use in the detection analysis")
 
 #Load the arguments:
 args = parser.parse_args()
@@ -59,7 +60,10 @@ def get_noise_from_enterprise(noisefile):
 parfiles = sorted(glob.glob(args.parpath + '*.par'))
 timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(A_gwb[args.amp_index]) + '_gwb/*.tim'))
 noisefiles = sorted(glob.glob(args.noisepath + '*.json'))
-psrlist = np.loadtxt("psrlist.txt", dtype = 'string')
+
+if args.psrlist:
+    psrlist = np.loadtxt(args.psrlist, dtype = 'string')
+
 
 psrs = []
 for p, t in zip(parfiles, timfiles):
