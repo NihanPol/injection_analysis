@@ -43,7 +43,7 @@ parser.add_argument("--nsamples", dest = 'nsamples', help = 'Number of samples i
 parser.add_argument("--amps_path", dest = 'amps_path', help = "Path to numpy file containing array of injected stochastic GWB amplitudes; Default: ./injected_amps.npy", default = './injected_amps.npy')
 parser.add_argument("--psrlist", dest = 'psrlist', default = '', help = "Provide a text file of pulsar names to use in the detection analysis")
 
-parser.add_argument("--dm_var", dest = 'dmvar', action = 'store_true', default = False, help = "Flag to enable DM variations; Default: False")
+parser.add_argument("--dm_var", dest = 'dm_var', action = 'store_true', default = False, help = "Flag to enable DM variations; Default: False")
 parser.add_argument("--dm_gp", dest = 'dm_gp', action = 'store_true', default = False, help = "Flag to toggle on DM GP; Default: False")
 parser.add_argument("--dm_annual", dest = 'dm_annual', action = 'store_true', default = False, help = "Flag to toggle on DM GP; Default: False")
 parser.add_argument("--dm_chrom", dest = 'dm_chrom', action = 'store_true', default = False, help = "Flag to toggle on DM GP; Default: False")
