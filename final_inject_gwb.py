@@ -7,34 +7,48 @@ import libstempo as T2
 import libstempo.toasim as LT
 import argparse
 
-#Specify paths to par and tim files. EDIT
-parpath = '/users/nspol/stochastic_11yr_analysis/data/partim/'
-timpath = '/users/nspol/stochastic_11yr_analysis/data/partim/'
+#Initialize the parser to accept user inputs
+parser = argparse.ArgumentParser(description = "Initiate data sets with stochastic GWB injections with given numpy seed (realization) and amplitudes")
 
-parfiles = sorted(glob.glob(parpath+'*.par'))
-timfiles = sorted(glob.glob(timpath+'*.tim'))
+#Required arguments:
+parser.add_argument("-seed", nargs = '+', type = int, dest = 'seed', required = True, help = "Seed corresponding to the realization. Can accept multiple values here!")
+parser.add_argument("-amps_path", dest = 'amps_path', required = True, help = "Path to numpy file containing array of injected stochastic GWB amplitudes to inject in this dataset; Default: ./injected_amps.npy", default = './injected_amps.npy')
+parser.add_argument("-outdir", required = True, help = "Base directory to store output chain and parameter files")
 
-print(len(parfiles),len(timfiles))
+#Optional arguments:
+parser.add_argument("--timpath", help = "Path to base directory holding timfiles; Default: /users/nspol/stochastic_11yr_analysis/data/partim/", default = "/users/nspol/stochastic_11yr_analysis/data/partim/")
+parser.add_argument("--parpath", help = "Path to directory containing all parfiles; Default: /users/nspol/stochastic_11yr_analysis/data/partim/", default = "/users/nspol/stochastic_11yr_analysis/data/partim/")
+parser.add_argument("--ephemeris", dest = 'ephem', help = "Choose solar system ephemeris for loading in pulsars; Default: DE436", choices = ['DE430', 'DE435', 'DE436', 'BayesEphem'], default = 'DE436')
+parser.add_argument("--gamma", dest = 'gamma',  help = "Specify index of stochastic GWB powerlaw function; Default: 13./3.", type = float, default = 13./3.)
+
+#Load the arguments:
+args = parser.parse_args()
+
+parfiles = sorted(glob.glob(args.parpath+'*.par'))
+timfiles = sorted(glob.glob(args.timpath+'*.tim'))
+
+print("Loading in {} and {} par and tim files".format(len(parfiles),len(timfiles)))
 
 #Define different stochastic GWB amplitudes to be injected:
-A_gwb_1 = np.linspace(1e-16, 1e-15, 20)
-A_gwb_2 = np.linspace(1.1e-15, 5e-15, 10)
 
-A_gwb = np.append(A_gwb_1, A_gwb_2)
-
-#Here make 10 different realizations of the GWB by changing the seed:
+A_gwb = np.load(args.amps_path)
 
 #Specify parent directory to hold all the realizations of the different injected amplitudes:
-outdir = '/scratch/nspol/real_injected_timfiles/'
+outdir = args.outdir
 
 #This is the meat of the code.
-#The list in the for statement contains pseudo-randomly chosen numpy.seed values
-for ii in [0, 1, 2, 3, 4, 5, 1000, 1993, 2000, 3000]:
+seeds = args.seed
+
+for ii in seeds:
     
+    if ii < 0:
+        print("Cannot work with seed < 0. Skipping this seed and moving on!")
+        continue
+
     dirname = "realization_" + str(ii) + '/'
     
-    if not os.path.exists(outdir + dirname):
-        os.makedirs(outdir + dirname)
+    if not os.path.exists(args.outdir + dirname):
+        os.makedirs(args.outdir + dirname)
     
     for loc in range(len(A_gwb)):
 
@@ -53,15 +67,14 @@ for ii in [0, 1, 2, 3, 4, 5, 1000, 1993, 2000, 3000]:
             print('\r{0} of {1}'.format(ii+1,len(parfiles)))
 
         #Inject the GWB into the pulsars:
-        LT.createGWB(t2psr, Amp=A_gwb[loc], gam=13./3., seed = int(ii))
+        LT.createGWB(t2psr, Amp = A_gwb[loc], gam = args.gamma, seed = int(ii))
 
-        #outdir = '/users/nspol/stochastic_11yr_analysis/data/injections/'
         amp_dir_name = 'injecting_' + str(A_gwb[loc]) + '_gwb/'
 
-        if not os.path.exists(outdir + dirname + amp_dir_name):
-            os.makedirs(outdir + dirname + amp_dir_name)
+        if not os.path.exists(args.outdir + dirname + amp_dir_name):
+            os.makedirs(args.outdir + dirname + amp_dir_name)
 
         #save the injected tim files only (not the par files)
         for ii,p in enumerate(t2psr):
-            timfile = outdir + dirname + amp_dir_name +'{0}.tim'.format(p.name)
+            timfile = args.outdir + dirname + amp_dir_name +'{0}.tim'.format(p.name)
             p.savetim(timfile)

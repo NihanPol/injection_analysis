@@ -3,8 +3,8 @@
 #PBS -l nodes=1:ppn=1,pvmem=50gb
 ##PBS -m abe
 #PBS -M noemail@hpc.wvu.edu
-#PBS -q stmcwilliams_lp
-##PBS -q debug
+##PBS -q stmcwilliams_lp
+#PBS -q debug
 
 #PBS -N injecting_real_data
 
@@ -15,6 +15,6 @@ export OPENBLAS_NUM_THREADS=1
 export GOTO_NUM_THREADS=1
 export OMP_NUM_THREADS=1
 
-cd /users/nspol/stochastic_11yr_analysis/notebooks/injection_analysis/
+cd /users/nspol/stochastic_11yr_analysis/notebooks/new_injection_analysis/
 
-python final_inject_gwb.py
+python final_inject_gwb.py -amps_path injected_amps.npy -outdir ./test/ -seed 123 456
