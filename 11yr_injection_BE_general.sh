@@ -25,4 +25,4 @@ cd /users/nspol/stochastic_11yr_analysis/notebooks/new_injection_analysis/
 ##The first input to the python script is realization number [0,9] while the second is the index
 ##of the amplitude array [0, 29].
 
-python 11yr_injection_BE_2A.py -realiz 0 -amp_index ${PBS_ARRAYID} -outdir ./test/ --psrlist psrlist.txt --dm_var --dm_gp
+python 11yr_injection_BE_general.py -realiz 0 -amp_index ${PBS_ARRAYID} -outdir ./test/ --psrlist psrlist.txt --dm_var --dm_gp
