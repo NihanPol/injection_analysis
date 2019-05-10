@@ -43,7 +43,7 @@ parser.add_argument("--nsamples", dest = 'nsamples', help = 'Number of samples i
 parser.add_argument("--amps_path", dest = 'amps_path', help = "Path to numpy file containing array of injected stochastic GWB amplitudes; Default: ./injected_amps.npy", default = './injected_amps.npy')
 parser.add_argument("--psrlist", dest = 'psrlist', default = '', help = "Provide a text file of pulsar names to use in the detection analysis")
 
-parser.add_argument("--dmvar", dest = 'dmvar', default = False, help = "Flag to enable DM variations; Default: False")
+parser.add_argument("--dm_var", dest = 'dmvar', default = False, help = "Flag to enable DM variations; Default: False")
 parser.add_argument("--dm_gp", dest = 'dm_gp', default = False, help = "Flag to toggle on DM GP; Default: False")
 parser.add_argument("--dm_annual", dest = 'dm_annual', default = False, help = "Flag to toggle on DM GP; Default: False")
 parser.add_argument("--dm_chrom", dest = 'dm_chrom', default = False, help = "Flag to toggle on DM GP; Default: False")
@@ -106,7 +106,7 @@ for nfile in noisefiles:
        
 
 pta = models.model_general(psrs, common_psd = 'powerlaw', noisedict = params, gamma_common = args.gamma,
-                      upper_limit = args.ul, bayesephem = args.useBE, dm_var = args.dmvar, dm_type = dm_gp, dm_annual = args.dm_annual, dm_chrom = args.dm_chrom)
+                      upper_limit = args.ul, bayesephem = args.useBE, dm_var = args.dm_var, dm_type = dm_gp, dm_annual = args.dm_annual, dm_chrom = args.dm_chrom)
 
 outdir = args.outdir + '/realization_' + args.realiz + '/injection_' + str(args.amp_index) + '/'
 sampler = model_utils.setup_sampler(pta, resume=True, outdir=outdir)
