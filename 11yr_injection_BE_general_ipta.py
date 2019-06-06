@@ -113,6 +113,8 @@ outdir = args.outdir + '/realization_' + args.realiz + '/injection_' + str(args.
 
 #IPTA grouping and sampling:
 
+#print(pta.param_names)
+
 x0 = np.hstack([noise_params[p.name] if p.name in noise_params.keys()
                 else p.sample() for p in pta.params])  # initial point
 ndim = len(x0)
@@ -130,7 +132,7 @@ for psr in psrs:
                   for par in pta.param_names if psr.name in par]
     groups.append(this_group)
 
-groups.append([pta.param_names.index('gwb_log10_A')])
+groups.append([pta.param_names.index('gw_log10_A')])
 
 if args.useBE:
     # all BE params
@@ -142,7 +144,7 @@ if args.useBE:
     # jup_orb elements + GWB
     this_group = [pta.param_names.index(par)
                   for par in pta.param_names if 'jup_orb' in par]
-    this_group.append(pta.param_names.index('gwb_log10_A'))
+    this_group.append(pta.param_names.index('gw_log10_A'))
     groups.append(this_group)
 
 sampler = ptmcmc(ndim, pta.get_lnlikelihood, pta.get_lnprior, cov, groups=groups,
@@ -156,7 +158,7 @@ RNA_params = [pname for pname in pta.param_names if 'red_noise_log10_A' in pname
 RN_loguni = su.build_loguni_draw(pta, RNA_params, (-20,-11), name='RN_loguni')
 sampler.addProposalToCycle(RN_loguni, 5)
 
-GWB_loguni = su.build_loguni_draw(pta, 'gwb_log10_A', (-18,-12), name='GWB_loguni')
+GWB_loguni = su.build_loguni_draw(pta, 'gw_log10_A', (-18,-12), name='GWB_loguni')
 sampler.addProposalToCycle(GWB_loguni, 5)
 
 if args.useBE:

@@ -22,7 +22,13 @@ export OMP_NUM_THREADS=1
 
 cd /users/nspol/stochastic_11yr_analysis/notebooks/new_injection_analysis/
 
+#Stuff to avoid IO bomb
+rsync -av /users/nspol/.local/tempo2/share/tempo2 /dev/shm/
+export TEMPO2=/dev/shm/tempo2
+
 ##The first input to the python script is realization number [0,9] while the second is the index
 ##of the amplitude array [0, 29].
 
 python 11yr_injection_BE_general_ipta.py -realiz 0 -amp_index ${PBS_ARRAYID} -outdir ./test/ --psrlist psrlist.txt --dm_var --dm_gp
+
+rm -rf /dev/shm/tempo2
