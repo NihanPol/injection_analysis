@@ -45,7 +45,7 @@ for ii in seeds:
         print("Cannot work with seed < 0. Skipping this seed and moving on!")
         continue
 
-    dirname = "realization_" + str(ii) + '/'
+    dirname = "/realization_" + str(ii) + '/'
     
     if not os.path.exists(args.outdir + dirname):
         os.makedirs(args.outdir + dirname)
@@ -69,7 +69,7 @@ for ii in seeds:
         #Inject the GWB into the pulsars:
         LT.createGWB(t2psr, Amp = A_gwb[loc], gam = args.gamma, seed = int(ii))
 
-        amp_dir_name = 'injecting_' + str(A_gwb[loc]) + '_gwb/'
+        amp_dir_name = '/injecting_' + str(A_gwb[loc]) + '_gwb/'
 
         if not os.path.exists(args.outdir + dirname + amp_dir_name):
             os.makedirs(args.outdir + dirname + amp_dir_name)
