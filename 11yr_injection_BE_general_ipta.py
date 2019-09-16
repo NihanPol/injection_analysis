@@ -155,6 +155,10 @@ if args.useBE:
 sampler = ptmcmc(ndim, pta.get_lnlikelihood, pta.get_lnprior, cov, groups=groups,
                  outDir=outdir, resume=True)
 
+#Write out the pars file for easyness later:
+np.savetxt(outdir+'/pars.txt',
+               list(map(str, pta.param_names)), fmt='%s')
+
 # additional proposals
 full_prior = su.build_prior_draw(pta, pta.param_names, name='full_prior')
 sampler.addProposalToCycle(full_prior, 10)
