@@ -109,7 +109,7 @@ for nfile in noisefiles:
     noise_params.update(get_noise_from_enterprise(nfile))
        
 #Setup the PTA
-pta = models.model_general(psrs, common_psd = 'powerlaw', noisedict = noise_params, gamma_common = gamma, orf = args.orf, common_psd = args.common_psd, red_psd = args.red_psd,
+pta = models.model_general(psrs, noisedict = noise_params, gamma_common = gamma, orf = args.orf, common_psd = args.common_psd, red_psd = args.red_psd,
                       upper_limit = args.ul, bayesephem = args.useBE, dm_var = args.dm_var, dm_type = dm_gp, dm_annual = args.dm_annual, dm_chrom = args.dm_chrom, upper_limit_red = args.upper_limit_red, upper_limit_dm = args.upper_limit_dm, upper_limit_common = args.upper_limit_common)
 
 #Set output directory
