@@ -46,11 +46,16 @@ parser.add_argument("--noisepath", help = "Path to directory holding noisefiles;
 parser.add_argument("--ephemeris", dest = 'ephem', help = "Choose solar system ephemeris for loading in pulsars; Default: DE436", choices = ['DE430', 'DE435', 'DE436', 'BayesEphem'], default = 'DE436')
 parser.add_argument("--useBE", dest = 'useBE', action = 'store_true', default = False, help = "Flag to use BayesEphem in detection run; Default: False")
 parser.add_argument("-ul", "--upper-limit", dest = 'ul', action = 'store_true',  help = "Perform an upper limit run instead of detection run, with ALL priors set to UL priors; Default: False", default = False)
-parser.add_argument("--gamma", dest = 'gamma',  help = "Specify index of stochastic GWB powerlaw function; Default: 13./3.", type = float, default = 13./3.)
+parser.add_argument("--gamma", dest = 'gamma',  help = "Specify index of stochastic GWB powerlaw function; Default: 13./3.", default = 13./3.)
 parser.add_argument("--nsamples", dest = 'nsamples', help = 'Number of samples in output chain; Default: 5e6', type = int, default = 500000)
 parser.add_argument("--thin", dest = 'thin', help = 'thinning factor (keep every [thin]th sample)', type = int, default = 10)
 parser.add_argument("--amps_path", dest = 'amps_path', help = "Path to numpy file containing array of injected stochastic GWB amplitudes; Default: ./injected_amps.npy", default = './injected_amps.npy')
 parser.add_argument("--psrlist", dest = 'psrlist', default = '', help = "Provide a text file of pulsar names to use in the detection analysis")
+parser.add_argument("--orf", dest = 'orf', default = None, help = "Set the orf from None(no spat. corr), monopole, dipole, hd; Default: None")
+
+#Set type of spectrum:
+parser.add_argument("--common_psd", dest = 'common_psd', default = 'powerlaw', help = "Set common red noise spectrum type (powerlaw, spectrum, turnover); Default: powerlaw")
+parser.add_argument("--red_psd", dest = 'red_psd', default = 'powerlaw', help = "Set ind. red noise spectrum type (powerlaw, spectrum, turnover); Default: powerlaw")
 
 #Set priors explicitly here:
 parser.add_argument("--upper_limit_red", dest = 'upper_limit_red', action = 'store_true', default = None, help = 'Flag to set ONLY individual red noise prior to UL prior; Default: off')
@@ -66,14 +71,16 @@ parser.add_argument("--dm_chrom", dest = 'dm_chrom', action = 'store_true', defa
 args = parser.parse_args()
 
 if args.dm_gp:
-     dm_gp = 'gp'
+    dm_gp = 'gp'
+
+if args.gamma == 'None':
+    gamma = None
+else:
+    gamma = float(args.gamma)
+
 
 #Get the name of directory corresponding to amplitude of gwb:
 
-#A_gwb_1 = np.linspace(1e-16, 1e-15, 20)
-#A_gwb_2 = np.linspace(1.1e-15, 5e-15, 10)
-
-#A_gwb = np.append(A_gwb_1, A_gwb_2)
 A_gwb = np.load(args.amps_path)
 
 parfiles = sorted(glob.glob(args.parpath + '*.par'))
@@ -102,7 +109,7 @@ for nfile in noisefiles:
     noise_params.update(get_noise_from_enterprise(nfile))
        
 #Setup the PTA
-pta = models.model_general(psrs, common_psd = 'powerlaw', noisedict = noise_params, gamma_common = args.gamma,
+pta = models.model_general(psrs, common_psd = 'powerlaw', noisedict = noise_params, gamma_common = gamma, orf = args.orf, common_psd = args.common_psd, red_psd = args.red_psd,
                       upper_limit = args.ul, bayesephem = args.useBE, dm_var = args.dm_var, dm_type = dm_gp, dm_annual = args.dm_annual, dm_chrom = args.dm_chrom, upper_limit_red = args.upper_limit_red, upper_limit_dm = args.upper_limit_dm, upper_limit_common = args.upper_limit_common)
 
 #Set output directory
@@ -180,3 +187,4 @@ Nsamp = args.nsamples * args.thin
 sampler.sample(x0, Nsamp,
                SCAMweight=30, AMweight=20, DEweight=50,
 burn=int(5e4), thin=args.thin)
+
