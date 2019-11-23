@@ -1,4 +1,4 @@
-from __future__ import division,print_function
+from __future__ import division, print_function
 
 import numpy as np
 import sys,os,glob
@@ -29,9 +29,10 @@ args = parser.parse_args()
 
 A_gwb = np.load(args.amps_path)
 
+#Need to make this more elegant
 if args.read_pickle:
-    with open(args.timpath + "*.pkl") as f:
-        t2psr = pickle.load(f) 
+    with open(glob.glob(args.timpath + "*.pkl")[0], 'rb') as f:
+        t2psr_orig = pickle.load(f) 
 
 else:
     parfiles = sorted(glob.glob(args.parpath+'*.par'))
@@ -59,8 +60,11 @@ for ii in seeds:
     for loc in range(len(A_gwb)):
 
         #Initialize list to hold pulsar objects
-        t2psr = []
-        
+        if args.read_pickle:
+            t2psr = list(t2psr_orig)
+        else:
+            t2psr = []
+
         if not args.read_pickle:
             for ii in range(len(parfiles)):
                 #Read in pulsar parfile and tim file and append to t2psr list
