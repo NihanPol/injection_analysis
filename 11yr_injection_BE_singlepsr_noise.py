@@ -66,8 +66,7 @@ parser.add_argument("--dm_chrom", dest = 'dm_chrom', action = 'store_true', defa
 #Load the arguments:
 args = parser.parse_args()
 
-if args.dm_gp:
-    dm_gp = 'gp'
+dm_gp = 'gp'
 
 if args.gamma == 'None' or args.gamma is None:
     gamma = None
@@ -91,12 +90,10 @@ timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/inj
 #noisefiles = sorted(glob.glob(args.noisepath + '*.json'))
 
 #Read in the par and tim files and create the list of pulsars
-psrs = []
-
 if args.ephem in ['DE430', 'DE435', 'DE436']:
-    psr = Pulsar(parfiles, timfiles, ephem=args.ephem) #Cannot read in pulsars with BayesEphem
+    psrs = Pulsar(parfiles, timfiles, ephem=args.ephem) #Cannot read in pulsars with BayesEphem
 else:
-    psr = Pulsar(p, t, ephem = 'DE436')
+    psrs = Pulsar(p, t, ephem = 'DE436')
        
 #Setup the PTA
 pta = models.model_singlepsr_noise(psrs, tm_var = False, gamma_val = gamma, red_var = True, white_vary = True, 

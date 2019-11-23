@@ -4,8 +4,8 @@
 ##PBS -m abe
 #PBS -M noemail@hpc.wvu.edu
 ##PBS -q stmcwilliams_lp
-#PBS -q comm_mmem_day
-##PBS -q standby
+##PBS -q comm_mmem_day
+#PBS -q standby
 
 #PBS -t 0-33
 
@@ -20,7 +20,7 @@ export OPENBLAS_NUM_THREADS=1
 export GOTO_NUM_THREADS=1
 export OMP_NUM_THREADS=1 
 
-cd /users/nspol/stochastic_11yr_analysis/notebooks/injection_analysis
+cd /users/nspol/stochastic_11yr_analysis/notebooks/new_injection_analysis
 
 #Stuff to avoid IO bomb
 rsync -av /users/nspol/.local/tempo2/share/tempo2 /dev/shm/
@@ -29,4 +29,4 @@ export TEMPO2=/dev/shm/tempo2
 ##The first input to the python script is realization number [0,9] while the second is the index
 ##of the amplitude array [0, 29].
 
-python 11yr_injection_BE_general_ipta.py -realiz 0 -amp_index 0 -psr_index ${PBS_ARRAYID} -outdir /scratch/nspol/real_injected_results/noise_runs --psrlist /scratch/nspol/IPTA/partim_cut_IPTA/psrlist_cut_IPTA.txt --timpath /scratch/nspol/IPTA/ --parpath /scratch/nspol/IPTA/partim_cut_IPTA/ --noisepath /scratch/nspol/IPTA/partim_cut_IPTA/ --amps_path ipta_amps.npy
+python 11yr_injection_BE_singlepsr_noise.py -realiz 0 -amp_index 0 -psr_index ${PBS_ARRAYID} -outdir /scratch/nspol/real_injected_results/noise_runs/ --psrlist psrlist.txt --timpath /gpfs/scratch/nspol/real_injected_timfiles/ --parpath /gpfs/home/nspol/stochastic_11yr_analysis/data/partim/ --amps_path injected_amps.npy 
