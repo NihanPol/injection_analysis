@@ -123,10 +123,10 @@ pta = model_utils.HyperModel(sub_pta)
 #Set output directory
 outdir = args.outdir + '/realization_' + args.realiz + '/injection_' + str(args.amp_index) + '/'
 
-sampler = super_model.setup_sampler(resume=True, outdir=outdir)
+sampler = pta.setup_sampler(resume=True, outdir=outdir)
 
 N = int(5e6) # one mega-sample!
-x0 = super_model.initial_sample()
+x0 = pta.initial_sample()
 sampler.sample(x0, N, AMweight=25, SCAMweight=40, DEweight=55)
 
 #This does not play well with the hypermodel setup. 
