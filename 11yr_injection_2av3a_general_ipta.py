@@ -123,6 +123,16 @@ pta = model_utils.HyperModel(sub_pta)
 #Set output directory
 outdir = args.outdir + '/realization_' + args.realiz + '/injection_' + str(args.amp_index) + '/'
 
+sampler = super_model.setup_sampler(resume=True, outdir=outdir)
+
+N = int(5e6) # one mega-sample!
+x0 = super_model.initial_sample()
+sampler.sample(x0, N, AMweight=25, SCAMweight=40, DEweight=55)
+
+#This does not play well with the hypermodel setup. 
+#Commenting out for now, will come back to it later
+#Use the above default sampler setup w/o specific jump proposals
+"""
 #Setup up groupings for IPTA sampling
 
 #IPTA grouping and sampling:
@@ -187,4 +197,4 @@ Nsamp = args.nsamples * args.thin
 sampler.sample(x0, Nsamp,
                SCAMweight=30, AMweight=20, DEweight=50,
 burn=int(5e4), thin=args.thin)
-
+"""
