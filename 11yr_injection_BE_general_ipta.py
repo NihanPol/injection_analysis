@@ -67,6 +67,9 @@ parser.add_argument("--dm_gp", dest = 'dm_gp', action = 'store_true', default = 
 parser.add_argument("--dm_annual", dest = 'dm_annual', action = 'store_true', default = False, help = "Flag to toggle on DM GP; Default: False")
 parser.add_argument("--dm_chrom", dest = 'dm_chrom', action = 'store_true', default = False, help = "Flag to toggle on DM GP; Default: False")
 
+#Choose whether to impose minimum three year of timing data baseline rule:
+parser.add_argument("--time_baseline", dest = 'time_baseline', action = 'store_true', default = False, help = "Flag to impose three year timing baseline rule; Default = False")
+
 #Load the arguments:
 args = parser.parse_args()
 
@@ -77,7 +80,6 @@ if args.gamma == 'None':
     gamma = None
 else:
     gamma = float(args.gamma)
-
 
 #Get the name of directory corresponding to amplitude of gwb:
 
@@ -97,9 +99,19 @@ for p, t in zip(parfiles, timfiles):
         psr = Pulsar(p, t, ephem=args.ephem) #Cannot read in pulsars with BayesEphem
     else:
         psr = Pulsar(p, t, ephem = 'DE436')
-    #Check if this pulsar has baseline > 3 years
+
+    #Check if this pulsar is in the list provided
     if psr.name in psrlist:
-        psrs.append(psr)
+
+        #If enabled, check if psr has >3 yrs of data:
+        if args.time_baseline:
+            psr_tspan_yr = model_utils.get_tspan(psr) / (365.24 * 24 * 3600)
+            if psr_tspan_yr >= 3.0:
+                psrs.append(psr)
+            else:
+                continue
+        else:
+            psrs.append(psr)
     else:
         continue
 
