@@ -105,7 +105,7 @@ for p, t in zip(parfiles, timfiles):
 
         #If enabled, check if psr has >3 yrs of data:
         if args.time_baseline:
-            psr_tspan_yr = model_utils.get_tspan(psr) / (365.24 * 24 * 3600)
+            psr_tspan_yr = model_utils.get_tspan(np.array([psr])) / (365.24 * 24 * 3600)
             if psr_tspan_yr >= 3.0:
                 psrs.append(psr)
             else:
