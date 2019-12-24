@@ -22,7 +22,7 @@ parser.add_argument("--timpath", help = "Path to base directory holding timfiles
 parser.add_argument("--parpath", help = "Path to directory containing all parfiles; Default: /users/nspol/stochastic_11yr_analysis/data/partim/", default = "/users/nspol/stochastic_11yr_analysis/data/partim/")
 parser.add_argument("--ephemeris", dest = 'ephem', help = "Choose solar system ephemeris for loading in pulsars; Default: DE436", choices = ['DE430', 'DE435', 'DE436', 'BayesEphem'], default = 'DE436')
 parser.add_argument("--gamma", dest = 'gamma',  help = "Specify index of stochastic GWB powerlaw function; Default: 13./3.", type = float, default = 13./3.)
-parser.add_argument("--save_pickle", dest = 'save_pickle', action = 'store_true', default = True, help = "Flag to save dataset as pickle to save i/o time; Default: True")
+parser.add_argument("--save_pickle", dest = 'save_pickle', action = 'store_true', default = False, help = "Flag to save dataset as pickle to save i/o time; Default: True")
 
 #Load the arguments:
 args = parser.parse_args()
