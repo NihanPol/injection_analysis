@@ -82,7 +82,7 @@ else:
 A_gwb = np.load(args.amps_path)
 
 parfiles = sorted(glob.glob(args.parpath + '*.par'))
-timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(A_gwb[args.amp_index]) + '_gwb/*.tim'))
+timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(args.amp_index) + '_gwb/*.tim'))
 noisefiles = sorted(glob.glob(args.noisepath + '*.json'))
 
 if args.psrlist:
