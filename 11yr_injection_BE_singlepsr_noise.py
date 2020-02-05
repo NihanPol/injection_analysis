@@ -86,7 +86,7 @@ psr_choice = psrlist[psr_index]
 A_gwb = np.load(args.amps_path)
 
 parfiles = sorted(glob.glob(args.parpath + '*' + psr_choice + '*.par'))[0]
-timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(A_gwb[args.amp_index]) + '_gwb/' + '*' + psr_choice + '*.tim'))[0]
+timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(args.amp_index) + '_gwb/' + '*' + psr_choice + '*.tim'))[0]
 #noisefiles = sorted(glob.glob(args.noisepath + '*.json'))
 
 #Read in the par and tim files and create the list of pulsars
