@@ -74,7 +74,7 @@ def get_noise_from_enterprise(noisefile):
 
 parfiles = sorted(glob.glob(args.parpath + '*.par'))
 #timfiles = sorted(glob.glob(realiz_dir + injection_dir + '*.tim'))
-timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(A_gwb[args.amp_index]) + '_gwb/*.tim'))
+timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(args.amp_index) + '_gwb/*.tim'))
 noisefiles = sorted(glob.glob(args.noisepath + '*.json'))
 
 if args.psrlist:
