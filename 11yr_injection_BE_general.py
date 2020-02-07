@@ -43,6 +43,10 @@ parser.add_argument("--nsamples", dest = 'nsamples', help = 'Number of samples i
 parser.add_argument("--amps_path", dest = 'amps_path', help = "Path to numpy file containing array of injected stochastic GWB amplitudes; Default: ./injected_amps.npy", default = './injected_amps.npy')
 parser.add_argument("--psrlist", dest = 'psrlist', default = '', help = "Provide a text file of pulsar names to use in the detection analysis")
 
+#Specify number of frequency components for pulsar and common red process:
+parser.add_argument("--common_components", dest = 'common_components', default = 30, type = int, help = "Number of frequency components in common red process; Default: 30")
+parser.add_argument("--red_components", dest = 'red_components', default = 30, type = int, help = "Number of frequency components in pulsar red process; Default:30")
+
 parser.add_argument("--dm_var", dest = 'dm_var', action = 'store_true', default = False, help = "Flag to enable DM variations; Default: False")
 parser.add_argument("--dm_gp", dest = 'dm_gp', action = 'store_true', default = False, help = "Flag to toggle on DM GP; Default: False")
 parser.add_argument("--dm_annual", dest = 'dm_annual', action = 'store_true', default = False, help = "Flag to toggle on DM GP; Default: False")
@@ -106,7 +110,9 @@ for nfile in noisefiles:
        
 
 pta = models.model_general(psrs, common_psd = 'powerlaw', noisedict = params, gamma_common = args.gamma,
-                      upper_limit = args.ul, bayesephem = args.useBE, dm_var = args.dm_var, dm_type = dm_gp, dm_annual = args.dm_annual, dm_chrom = args.dm_chrom)
+                      upper_limit = args.ul, bayesephem = args.useBE, dm_var = args.dm_var, dm_type = dm_gp, 
+                      dm_annual = args.dm_annual, dm_chrom = args.dm_chrom,
+                      common_components = args.common_components, red_components = args.red_components)
 
 outdir = args.outdir + '/realization_' + args.realiz + '/injection_' + str(args.amp_index) + '/'
 sampler = model_utils.setup_sampler(pta, resume=True, outdir=outdir)
