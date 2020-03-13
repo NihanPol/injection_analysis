@@ -39,7 +39,7 @@ def model_general_4a(psrs, tm_svd=False, tm_norm=True,
     # find the maximum time span to set GW frequency sampling
     Tspan = model_utils.get_tspan(psrs)
     # red noise
-    s += red_noise_block(psd=red_psd, prior=amp_prior_red, Tspan=Tspan,
+    s += models.red_noise_block(psd=red_psd, prior=amp_prior_red, Tspan=Tspan,
                          components=red_components)
     # common red noise block
     if common_process:
@@ -136,7 +136,7 @@ def get_noise_from_enterprise(noisefile):
 
 parfiles = sorted(glob.glob(args.parpath + '*.par'))
 #timfiles = sorted(glob.glob(realiz_dir + injection_dir + '*.tim'))
-timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(args.amp_index) + '_gwb/*.tim'))
+timfiles = sorted(glob.glob(args.timpath + '/realization_' + args.realiz + '/injecting_' + str(A_gwb[args.amp_index]) + '_gwb/*.tim'))
 noisefiles = sorted(glob.glob(args.noisepath + '*.json'))
 
 if args.psrlist:
@@ -159,7 +159,7 @@ for nfile in noisefiles:
     params.update(get_noise_from_enterprise(nfile))
        
 
-pta = models.model_general(psrs, common_psd = 'powerlaw', noisedict = params, gamma_common = args.gamma,
+pta = model_general_4a(psrs, common_psd = 'powerlaw', noisedict = params, gamma_common = args.gamma,
                       upper_limit = args.ul, bayesephem = args.useBE, common_process = True, orf = 'hd', extra_common_process = True,
                       common_components = args.common_components, red_components = args.red_components)
 
